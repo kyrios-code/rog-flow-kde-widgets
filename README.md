@@ -62,7 +62,7 @@ Each original standalone widget ZIP includes its own `install.sh`. Download the 
 bash install.sh
 ```
 
-For example, to install **ROG Gaming HUD v1.4** after extracting its standalone ZIP into Downloads:
+For example, after extracting the **ROG Gaming HUD v1.4** standalone ZIP into a folder named `rog-gaming-hud-v14` under Downloads:
 
 ```bash
 cd ~/Downloads/rog-gaming-hud-v14
@@ -163,7 +163,7 @@ Choose **Full**, **Semi-Compact**, or **Compact**:
 
 **Save your work before launching Gaming Mode:** session switching may close your desktop session.
 
-> **Known Gaming metadata limitation:** The current baseline may count Steam tools/runtimes as games, miss recently played activity, or lack local cover art. These issues are being addressed before public release.
+> **Steam library behavior:** Gaming HUD filters known Steam tools and runtimes, reads recent-played activity from local Steam metadata, and loads locally cached artwork where available. Some games may lack cached cover art, and Steam library layouts may vary.
 
 ## Personalize the look
 
@@ -201,10 +201,10 @@ Each widget independently supports glass opacity. Open **Configure Widget → Ap
 - [Troubleshooting](docs/troubleshooting.md)
 - [Review handoff and known issues](docs/review-handoff.md)
 
-Developers can build standalone packages with `make build`, or individually with `make build-system`, `make build-control`, and `make build-gaming`. Generated `.plasmoid` files appear in `dist/`. The original working ZIP baselines are retained under `baselines/`.
+Developers can build standalone packages with `make build`, or individually with `make build-system`, `make build-control`, and `make build-gaming`. Generated `.plasmoid` files appear in `dist/`. Historical development ZIP baselines are retained under `baselines/`; use the tested [v1.0.0 release downloads](../../releases/tag/v1.0.0) for installation.
 
 ## Credits and license
 
 Project code is [MIT licensed](LICENSE). Third-party icons, trademarks, and fonts retain their own rights; see [third-party notices](THIRD_PARTY_NOTICES.md). ASUS ROG and Steam marks belong to their respective owners.
 
-**Made for the ROG Flow Z13 community.** Contributions and forks are welcome when the repository becomes public.
+**Made for the ROG Flow Z13 community.** Contributions, bug reports, and forks are welcome.
