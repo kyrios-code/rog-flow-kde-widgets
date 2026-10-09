@@ -64,6 +64,31 @@ class SteamFixtureTests(unittest.TestCase):
         self.helper.STEAM = [self.steam, flatpak]
         self.assertEqual(self.helper.library(), {"10": "Shared Game", "30": "Flatpak Game"})
 
+    def test_library_excludes_steam_compatibility_tools(self):
+        self.manifest(self.steam, "10", "Hollow Knight: Silksong")
+        self.manifest(self.steam, "20", "Constance")
+        self.manifest(self.steam, "30", "Proton Experimental")
+        self.manifest(self.steam, "40", "Proton 9.0")
+        self.manifest(self.steam, "50", "Steam Linux Runtime 3.0 (sniper)")
+        self.manifest(self.steam, "60", "Steamworks Common Redistributables")
+        self.manifest(self.steam, "70", "Proton Wars")  # A game, not a compatibility tool
+        self.assertEqual(self.helper.library(), {
+            "10": "Hollow Knight: Silksong", "20": "Constance",
+            "70": "Proton Wars",
+        })
+
+    def test_recent_nested_steam_config_and_missing_art(self):
+        raw='''"UserLocalConfigStore" { "Software" { "Valve" { "Steam" {
+            "apps" {
+                "10" { "LastPlayed" "100" "Playtime" "30" }
+                "20" { "LastPlayed" "200" }
+                "30" { "Playtime" "15" }
+            }
+        } } } }'''
+        self.write(self.steam / "userdata/111/config/localconfig.vdf", raw)
+        result=self.helper.recent({"10":"Silksong","20":"Constance","30":"Not played"})
+        self.assertEqual([x["name"] for x in result], ["Constance","Silksong"])
+
     def test_library_ignores_missing_or_nonnumeric_app_ids_and_missing_names(self):
         folder = self.steam / "steamapps"
         self.write(folder / "appmanifest_no_id.acf", '"name" "No ID"')
@@ -116,9 +141,8 @@ class SteamFixtureTests(unittest.TestCase):
         self.helper.STEAM = [self.steam, secondary]
         self.assertEqual(self.helper.recent({"10": "Game"})[0]["art"], art.resolve().as_uri())
 
-    @unittest.expectedFailure
-    def test_known_issue_last_played_must_stay_inside_its_game_block(self):
-        # Baseline recent() scans the next 1,400 characters without matching braces.
+    def test_last_played_must_stay_inside_its_game_block(self):
+        # A neighboring app timestamp must not leak into this app.
         self.write(self.steam / "userdata/111/config/localconfig.vdf", '''"10"
 {
     "Playtime" "42"

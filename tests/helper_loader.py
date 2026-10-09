@@ -14,7 +14,7 @@ HELPERS = {
     "control": ROOT / "widgets/rog-control/scripts/rog-control-helper.py",
     "gaming": ROOT / "widgets/rog-gaming/scripts/rog-gaming-helper.py",
 }
-CONSTANTS = {"control": {"FW"}, "gaming": {"HOME", "STEAM"}}
+CONSTANTS = {"control": {"FW"}, "gaming": {"HOME", "STEAM", "STEAM_TOOL_NAME"}}
 
 
 def load_helper(name):
