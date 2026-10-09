@@ -165,6 +165,59 @@ Choose **Full**, **Semi-Compact**, or **Compact**:
 
 > **Steam library behavior:** Gaming HUD filters known Steam tools and runtimes, reads recent-played activity from local Steam metadata, and loads locally cached artwork where available. Some games may lack cached cover art, and Steam library layouts may vary.
 
+## Optional z13ctl power profiles
+
+The widgets automatically display custom profiles configured in `z13ctl`. For owners who want to recreate the power profiles used in the screenshots, here is the suggested configuration. **These profiles are not bundled or installed by v1.0.0.** They are optional, and existing profiles should not be overwritten without reviewing their settings.
+
+| Profile | `z13ctl` name | Sustained TDP (PL1) | CPU Curve Optimizer |
+| --- | --- | ---: | ---: |
+| 🌿 Battery Eco | `battery-eco` | 25W | -10 |
+| 🎮 Battery Gaming | `battery-gaming` | 40W | -10 |
+| 🎮 Gaming 50 | `gaming-50` | 50W | -10 |
+| ⚡ Gaming 65 | `gaming-65` | 65W | -10 |
+| 🔥 Extreme Gaming 75 | `extreme-gaming-75` | 75W | 0 |
+| 🔥 Extreme Gaming 80 | `extreme-gaming-80` | 80W | 0 |
+
+The widget's icon classifier prioritizes **Extreme** over **Gaming**, so both `extreme-gaming-*` profiles display the Extreme icon. Profiles with `battery` or `eco` in their names use the Eco icon.
+
+### Create the optional profiles
+
+After installing and configuring [z13ctl](https://github.com/dahui/z13ctl), use the following commands **only for profiles you want to create**. The `--profile` flag stores settings without immediately applying them to the running profile.
+
+```bash
+z13ctl profile --create battery-eco
+z13ctl tdp --set 25 --profile battery-eco
+z13ctl undervolt --set -10 --profile battery-eco
+
+z13ctl profile --create battery-gaming
+z13ctl tdp --set 40 --profile battery-gaming
+z13ctl undervolt --set -10 --profile battery-gaming
+
+z13ctl profile --create gaming-50
+z13ctl tdp --set 50 --profile gaming-50
+z13ctl undervolt --set -10 --profile gaming-50
+
+z13ctl profile --create gaming-65
+z13ctl tdp --set 65 --profile gaming-65
+z13ctl undervolt --set -10 --profile gaming-65
+
+z13ctl profile --create extreme-gaming-75
+z13ctl tdp --set 75 --profile extreme-gaming-75
+z13ctl undervolt --set 0 --profile extreme-gaming-75
+```
+
+**80W sustained profile:** The Z13 can operate at this power level, but `z13ctl` requires `--force` above 75W and a verified fan-curve safeguard. Before creating or applying this profile, consult [z13ctl's power-limit and daemon documentation](https://dahui.github.io/z13ctl/commands/) for the version you installed. Do not assume Windows Armoury Crate's fan behavior carries over to Linux. Create the profile only when the installed CLI supports storing a forced 80W setting safely.
+
+To check which profiles exist and which one is active:
+
+```bash
+z13ctl profile --list
+z13ctl tdp --get
+z13ctl undervolt --get
+```
+
+Power limits and undervolts affect hardware behavior. Stability and cooling depend on your firmware, system configuration, and workload. The recommended values are examples from the project's Z13 setup, not guaranteed results for every machine.
+
 ## Personalize the look
 
 ![ROG theme and transparency settings](screenshots/gaming-theme-settings.png)
