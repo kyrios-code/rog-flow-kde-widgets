@@ -13,7 +13,7 @@ def roots():
                 yield resolved
 
 STEAM_TOOL_NAME = re.compile(
-    r"^(?:Proton(?: Experimental| Hotfix| [0-9][\\w. -]*)?|"
+    r"^(?:Proton(?: Experimental| Hotfix| [0-9][\w. -]*)?|"
     r"Steam Linux Runtime(?:[ -].*)?|"
     r"Steamworks Common Redistributables|"
     r"Steam Runtime(?:[ -].*)?|"
