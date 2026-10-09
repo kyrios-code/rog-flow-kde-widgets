@@ -10,7 +10,7 @@
 
 </div>
 
-> **Status: private preview / release candidate.** Tested visually on one ROG Flow Z13 with CachyOS and a configured Gamescope session. This is an unofficial community project, not affiliated with ASUS or Valve. The downloadable release installer is not published yet.
+> **Initial release: [v1.0.0](../../releases/tag/v1.0.0).** Tested on an ASUS ROG Flow Z13 running CachyOS, KDE Plasma 6, and a configured Gamescope session. This is an unofficial community project, not affiliated with ASUS or Valve.
 
 ## Three widgets. One desktop.
 
@@ -20,19 +20,25 @@ Turn your ROG Flow Z13 into a transparent, themeable desktop dashboard. Install 
 | --- | --- | --- |
 | **ROG System Widget** | CPU/GPU usage, RAM, battery, APU temperature, fan RPM, TDP, storage, network graph and active power profile | 1.3.0 |
 | **ROG Control HUD** | Switch `z13ctl` performance profiles, view AC/battery autoswitch targets, control keyboard and lightbar RGB | 1.2.0 |
-| **ROG Gaming HUD** | Steam Game Mode launcher, four Bluetooth controller slots with battery readings, recently played games, and power-profile selection | 1.0.0 |
+| **ROG Gaming HUD** | Steam Game Mode launcher, four Bluetooth controller slots with battery readings, recently played games, and power-profile selection | 1.4.0 |
 
 ### Desktop showcase
 
 ![ROG Flow Z13 CachyOS desktop with all three KDE widgets](screenshots/desktop-overview.png)
 
-The screenshots below will appear automatically when the matching PNG files are uploaded to the repository's `screenshots/` folder.
+### Power Profile Management
+
+Switch between battery-saving, gaming, and extreme-performance profiles using the ROG Control HUD, or select a launch profile directly from Gaming HUD before entering Steam Gaming Mode.
+
+![ROG Flow Z13 desktop showing all three widgets and the power profile selector](screenshots/desktop-power-profiles.png)
+
+*The currently running profile is shown separately from the profile selected for launching Gaming Mode.*
 
 ## Quick install
 
 ### Recommended: download and run
 
-The intended public release will provide a **complete ZIP** with all three prebuilt widgets and a root-level `install.sh`. Once that bundle is published:
+Download the **[complete v1.0.0 bundle](../../releases/tag/v1.0.0)** with all three prebuilt widgets and a root-level `install.sh`:
 
 1. Open [Releases](../../releases) and download the complete bundle.
 2. Extract the ZIP.
@@ -44,7 +50,7 @@ bash install.sh
 
 4. Open **KDE Plasma → Edit Mode → Add Widgets**, then search for **ROG System Widget**, **ROG Control HUD**, or **ROG Gaming HUD**.
 
-**The release ZIP is not available yet.** Until then, use the source installation below; do not expect `bash install.sh` to work from the repository root.
+The bundle installer offers all three widgets or an individual widget. **Run it from the extracted release ZIP**, not from the repository root.
 
 ![Find all three widgets in KDE Plasma Add Widgets](screenshots/plasma-widget-picker.png)
 
@@ -56,10 +62,10 @@ Each original standalone widget ZIP includes its own `install.sh`. Download the 
 bash install.sh
 ```
 
-For example, to test **ROG Gaming HUD v1.1** after extracting its ZIP into Downloads:
+For example, to install **ROG Gaming HUD v1.4** after extracting its standalone ZIP into Downloads:
 
 ```bash
-cd ~/Downloads/rog-gaming-hud-v11
+cd ~/Downloads/rog-gaming-hud-v14
 bash install.sh
 ```
 
@@ -71,7 +77,7 @@ systemctl --user restart plasma-plasmashell.service
 
 This reload command is intended for the CachyOS KDE setup used to test these widgets; it is not normally necessary for a first-time install. It may briefly interrupt the desktop shell. **Do not run the widget installer with `sudo`.**
 
-> **Note:** These standalone ZIPs are the original-style test packages. The repository's source-build workflow uses self-contained `.plasmoid` packages instead. We will make the final release bundle use one consistent installer after testing Gaming HUD v1.1.
+> **Note:** The four tested ZIP downloads are available in [GitHub Releases](../../releases/tag/v1.0.0). Developers can also build self-contained `.plasmoid` packages from the repository source.
 
 ### Available now: install from source
 
