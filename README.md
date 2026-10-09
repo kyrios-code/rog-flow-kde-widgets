@@ -22,9 +22,11 @@ Turn your ROG Flow Z13 into a transparent, themeable desktop dashboard. Install 
 | **ROG Control HUD** | Switch `z13ctl` performance profiles, view AC/battery autoswitch targets, control keyboard and lightbar RGB | 1.2.0 |
 | **ROG Gaming HUD** | Steam Game Mode launcher, four Bluetooth controller slots with battery readings, recently played games, and power-profile selection | 1.0.0 |
 
-### Screenshots
+### Desktop showcase
 
-Real desktop screenshots have been captured for the upcoming release: full desktop, each HUD, Gaming HUD Full/Compact, power-profile selector, appearance/display settings, and Plasma's widget picker. **Image upload is pending**, so this README intentionally does not show broken image links.
+![ROG Flow Z13 CachyOS desktop with all three KDE widgets](screenshots/desktop-overview.png)
+
+The screenshots below will appear automatically when the matching PNG files are uploaded to the repository's `screenshots/` folder.
 
 ## Quick install
 
@@ -43,6 +45,8 @@ bash install.sh
 4. Open **KDE Plasma → Edit Mode → Add Widgets**, then search for **ROG System Widget**, **ROG Control HUD**, or **ROG Gaming HUD**.
 
 **The release ZIP is not available yet.** Until then, use the source installation below; do not expect `bash install.sh` to work from the repository root.
+
+![Find all three widgets in KDE Plasma Add Widgets](screenshots/plasma-widget-picker.png)
 
 ### Available now: install from source
 
@@ -94,15 +98,29 @@ The installer installs the widgets for the current signed-in desktop user. Steam
 
 ## System HUD
 
+![ROG System HUD full view](screenshots/system-hud.png)
+
 Monitor your ROG Flow's utilization, battery, cooling, power limits, graphics memory, storage, network traffic and active profile without opening a terminal. Choose a coordinated color theme, adjust glass transparency, and select Full or Semi-Compact display.
 
 ## Control HUD
+
+![ROG Control HUD power profiles and lighting](screenshots/control-hud.png)
 
 Switch between firmware and custom `z13ctl` profiles, including profiles named for gaming, battery use, or extreme performance. The current profile is highlighted. The profile list scrolls when necessary and firmware modes can be hidden. Keyboard and lightbar lighting can be controlled independently.
 
 **Changing a profile or lighting setting changes the actual hardware configuration.**
 
 ## Gaming HUD
+
+**Full view**
+
+![ROG Gaming HUD full display](screenshots/gaming-hud-full.png)
+
+**Compact view**
+
+![ROG Gaming HUD compact display](screenshots/gaming-hud-compact.png)
+
+![Gaming Mode profile selector](screenshots/gaming-profile-selector.png)
 
 A square **Game Mode** card opens a frameless power-profile selector. It distinguishes **currently running** from **selected for launch**, so you can choose a profile before entering Gamescope. The HUD also shows up to four Bluetooth controllers and their reported battery levels.
 
@@ -117,6 +135,21 @@ Choose **Full**, **Semi-Compact**, or **Compact**:
 > **Known Gaming metadata limitation:** The current baseline may count Steam tools/runtimes as games, miss recently played activity, or lack local cover art. These issues are being addressed before public release.
 
 ## Personalize the look
+
+![ROG theme and transparency settings](screenshots/gaming-theme-settings.png)
+
+<details>
+<summary>More configuration screenshots</summary>
+
+**Gaming display modes**
+
+![Gaming display mode settings](screenshots/gaming-display-settings.png)
+
+**Profile visibility**
+
+![Gaming profile settings](screenshots/gaming-profile-settings.png)
+
+</details>
 
 All three widgets use the same four palettes:
 
