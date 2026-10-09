@@ -1,0 +1,13 @@
+{
+  "KPlugin": {
+    "Id": "io.rog.systemwidget",
+    "Name": "ROG System Widget",
+    "Description": "Native transparent ROG Flow Z13 system telemetry",
+    "Icon": "utilities-system-monitor",
+    "Version": "1.3.0",
+    "Category": "System Information",
+    "License": "MIT"
+  },
+  "KPackageStructure": "Plasma/Applet",
+  "X-Plasma-API-Minimum-Version": "6.0"
+}

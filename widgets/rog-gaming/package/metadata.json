@@ -1,0 +1,13 @@
+{
+  "KPlugin": {
+    "Id": "io.rog.gaminghud",
+    "Name": "ROG Gaming HUD",
+    "Description": "Steam library and Gamescope launcher for ROG Flow",
+    "Icon": "applications-games",
+    "Version": "1.0.0",
+    "Category": "System Information",
+    "License": "MIT"
+  },
+  "KPackageStructure": "Plasma/Applet",
+  "X-Plasma-API-Minimum-Version": "6.0"
+}

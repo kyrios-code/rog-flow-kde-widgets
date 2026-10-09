@@ -1,0 +1,13 @@
+{
+  "KPlugin": {
+    "Id": "io.rog.controlhud",
+    "Name": "ROG Control HUD",
+    "Description": "ROG power profiles and lighting",
+    "Icon": "preferences-system-power-management",
+    "Version": "1.2.0",
+    "Category": "System Information",
+    "License": "MIT"
+  },
+  "KPackageStructure": "Plasma/Applet",
+  "X-Plasma-API-Minimum-Version": "6.0"
+}

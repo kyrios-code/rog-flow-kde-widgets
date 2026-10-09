@@ -1,0 +1,29 @@
+name: Validate and package widgets
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Qt syntax tooling
+        run: sudo apt-get update && sudo apt-get install -y qt6-declarative-dev-tools
+      - name: Validate QML syntax
+        run: QMLFORMAT=/usr/lib/qt6/bin/qmlformat python3 tools/validate.py --require-qml
+      - name: Validate and test mocked helpers
+        run: make test
+      - name: Build independent packages
+        run: make build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rog-flow-plasmoids
+          path: dist/*.plasmoid
+          if-no-files-found: error
+          retention-days: 14
