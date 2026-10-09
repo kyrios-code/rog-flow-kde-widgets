@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 WIDGETS = {
     'system': ('io.rog.systemwidget', '1.3.0', 'telemetry.py'),
     'control': ('io.rog.controlhud', '1.2.0', 'rog-control-helper.py'),
-    'gaming': ('io.rog.gaminghud', '1.0.0', 'rog-gaming-helper.py'),
+    'gaming': ('io.rog.gaminghud', '1.4.0', 'rog-gaming-helper.py'),
 }
 
 
