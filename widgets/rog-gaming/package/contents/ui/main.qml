@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Window
 import QtQuick.Controls as QQC2
@@ -15,7 +16,7 @@ PlasmoidItem {
  readonly property bool semiCompactMode: displayMode===2
  readonly property bool showHeader: !compactMode
  readonly property bool showRecent: displayMode===0
- readonly property int surfaceHeight: compactMode ? 182 : (semiCompactMode ? 292 : 405)
+ readonly property int surfaceHeight: compactMode ? 182 : (semiCompactMode ? 292 : 419)
  implicitWidth: 390; implicitHeight: surfaceHeight
  Layout.preferredWidth:390;Layout.preferredHeight:root.surfaceHeight
  Layout.minimumWidth:280;Layout.minimumHeight:root.compactMode?140:270
@@ -98,17 +99,32 @@ PlasmoidItem {
      delegate:Rectangle {
       required property int index
       readonly property var game:index<(root.library.recent||[]).length?root.library.recent[index]:null
-      width:65;height:69;radius:7;clip:true
-      color:Qt.rgba(.07,.14,.22,.38);border.width:1;border.color:root.accent
-      Image{anchors.fill:parent;source:parent.game&&parent.game.art?parent.game.art:"";fillMode:Image.PreserveAspectCrop;asynchronous:true;visible:status===Image.Ready}
-      Text{anchors.centerIn:parent;visible:!parent.game||!parent.game.art;text:"▣";font.pixelSize:20;color:root.iconAccent}
+      width:65;height:78;radius:8
+      color:Qt.rgba(.07,.14,.22,.38)
+      border.width:coverHover.containsMouse?2:1
+      border.color:coverHover.containsMouse?root.iconAccent:root.accent
+      Rectangle {
+       id:coverMask;anchors.fill:parent;anchors.margins:1;radius:7
+       color:"white";visible:false
+       layer.enabled:true
+      }
+      Image {
+       id:coverImage;anchors.fill:parent;anchors.margins:1
+       source:parent.game&&parent.game.art?parent.game.art:""
+       fillMode:Image.PreserveAspectCrop;asynchronous:true
+       visible:status===Image.Ready
+       layer.enabled:true
+       layer.effect:MultiEffect {maskEnabled:true;maskSource:coverMask}
+      }
+      Text{anchors.centerIn:parent;width:parent.width-6;horizontalAlignment:Text.AlignHCenter;wrapMode:Text.Wrap;maximumLineCount:3;elide:Text.ElideRight;visible:coverImage.status!==Image.Ready;text:parent.game?parent.game.name:"▣";font.pixelSize:parent.game?10:20;color:root.iconAccent}
       MouseArea{id:coverHover;anchors.fill:parent;hoverEnabled:true}
-      QQC2.ToolTip.visible:coverHover.containsMouse
-      QQC2.ToolTip.text:game?game.name:"No recent game"
+      QQC2.ToolTip.visible:coverHover.containsMouse && !!game
+      QQC2.ToolTip.delay:400
+      QQC2.ToolTip.text:game?game.name:""
      }
     }
    }
-   Text{visible:root.showRecent;x:19;y:390;width:350;elide:Text.ElideRight;text:root.feedback||("STEAM LIBRARY  ·  "+root.library.installed+" INSTALLED");font.pixelSize:11;color:root.iconAccent}
+   Text{visible:root.showRecent;x:19;y:405;width:350;elide:Text.ElideRight;text:root.feedback||("STEAM LIBRARY  ·  "+root.library.installed+" INSTALLED");font.pixelSize:11;color:root.iconAccent}
 
   }
  }
