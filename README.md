@@ -84,7 +84,7 @@ This reload command is intended for the CachyOS KDE setup used to test these wid
 Requires Python 3.12+, Make, and `kpackagetool6`:
 
 ```bash
-git clone https://github.com/jsmola01/rog-flow-kde-widgets.git
+git clone https://github.com/kyrios-code/rog-flow-kde-widgets.git
 cd rog-flow-kde-widgets
 make test
 make install
