@@ -134,6 +134,12 @@ class SteamFixtureTests(unittest.TestCase):
                 self.assertEqual(self.helper.recent({"10": "Game"})[0]["art"], candidate.resolve().as_uri())
                 candidate.unlink()
 
+    def test_recent_uses_hashed_artwork_directory(self):
+        self.localconfig(self.steam, "111", [("10", 123)])
+        cover=self.write(self.steam / "appcache/librarycache/10/abcdef/library_600x900.jpg")
+        result=self.helper.recent({"10": "Game"})
+        self.assertEqual(result[0]["art"], cover.resolve().as_uri())
+
     def test_recent_art_can_come_from_another_existing_steam_root(self):
         secondary = self.base / "secondary"
         art = self.write(secondary / "appcache/librarycache/10_library_600x900.jpg")
