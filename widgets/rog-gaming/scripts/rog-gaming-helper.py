@@ -90,6 +90,16 @@ def recent(games):
                 if candidate.is_file():
                     art=candidate.resolve().as_uri()
                     break
+            if not art:
+                # New Steam clients cache covers under appid/<content-hash>/.
+                # Prefer portrait covers; fall back to a capsule or header.
+                for pattern in ("*/library_600x900.jpg", "*/library_600x900.png",
+                                "*/library_600x900.webp", "*/library_capsule.jpg",
+                                "*/library_header.jpg", "*/library_hero.jpg"):
+                    matches=sorted((cache/appid).glob(pattern))
+                    if matches:
+                        art=matches[0].resolve().as_uri()
+                        break
             if art:break
         result.append(dict(id=appid,name=games[appid],lastPlayed=timestamp,art=art))
     return result
