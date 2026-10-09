@@ -57,6 +57,23 @@ make install
 
 Or install individually with `make install-system`, `make install-control`, or `make install-gaming`. No `sudo` is needed. Existing user-level widget packages are backed up before upgrades. See [installation and recovery](docs/installation.md).
 
+## Install z13ctl first (required)
+
+**These widgets rely on [z13ctl by dahui](https://github.com/dahui/z13ctl) for ROG Flow hardware integration.** On CachyOS (Arch-based), install its prebuilt AUR package:
+
+```bash
+yay -S z13ctl-bin
+```
+
+Follow the upstream [z13ctl installation guide](https://dahui.github.io/z13ctl/installation/) to complete its systemd/permission setup, then verify:
+
+```bash
+z13ctl status
+z13ctl profile --list
+```
+
+For a graphical hardware-control app, [z13gui](https://github.com/dahui/z13gui) is an optional companion, **not required** for these widgets. The upstream author recommends it for users who prefer a GUI. These widgets do not install z13ctl, z13gui, or change system permissions automatically.
+
 ## Requirements
 
 This project initially targets **CachyOS + KDE Plasma 6 + ASUS ROG Flow Z13**, rather than every Linux distribution or ROG model.
@@ -71,9 +88,9 @@ This project initially targets **CachyOS + KDE Plasma 6 + ASUS ROG Flow Z13**, r
 | BlueZ / `bluetoothctl` | Bluetooth controller connection and battery status |
 | **Bulky Pixels** font | Intended pixel-style appearance; not currently bundled |
 
-**`z13gui` is not required by the widgets.** Gamescope and Steam must already be configured independently. The font's redistribution license and approved installation source are being reviewed; fallback fonts may look different.
+Gamescope and Steam must already be configured independently. The font's redistribution license and approved installation source are being reviewed; fallback fonts may look different.
 
-No hardcoded `/home/kyrios` path is required by the migrated packages. Installation uses the current user's home/data directory. Steam discovery supports standard roots and libraries listed in Steam's configuration; nonstandard setups are not guaranteed.
+The installer installs the widgets for the current signed-in desktop user. Steam libraries are discovered automatically from Steam's local configuration.
 
 ## System HUD
 
