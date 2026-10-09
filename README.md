@@ -48,6 +48,31 @@ bash install.sh
 
 ![Find all three widgets in KDE Plasma Add Widgets](screenshots/plasma-widget-picker.png)
 
+### Install a downloaded widget ZIP
+
+Each original standalone widget ZIP includes its own `install.sh`. Download the widget, extract it, open a terminal in the extracted directory, and run:
+
+```bash
+bash install.sh
+```
+
+For example, to test **ROG Gaming HUD v1.1** after extracting its ZIP into Downloads:
+
+```bash
+cd ~/Downloads/rog-gaming-hud-v11
+bash install.sh
+```
+
+If an updated widget still displays the old version, save your work and reload Plasma Shell:
+
+```bash
+systemctl --user restart plasma-plasmashell.service
+```
+
+This reload command is intended for the CachyOS KDE setup used to test these widgets; it is not normally necessary for a first-time install. It may briefly interrupt the desktop shell. **Do not run the widget installer with `sudo`.**
+
+> **Note:** These standalone ZIPs are the original-style test packages. The repository's source-build workflow uses self-contained `.plasmoid` packages instead. We will make the final release bundle use one consistent installer after testing Gaming HUD v1.1.
+
 ### Available now: install from source
 
 Requires Python 3.12+, Make, and `kpackagetool6`:
