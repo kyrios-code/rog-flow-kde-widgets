@@ -90,9 +90,9 @@ This project initially targets **CachyOS + KDE Plasma 6 + ASUS ROG Flow Z13**, r
 | Steam | Local library and recently played information |
 | `steamos-session-select gamescope` | Switching into an existing Gaming Mode session |
 | BlueZ / `bluetoothctl` | Bluetooth controller connection and battery status |
-| **Bulky Pixels** font | Intended pixel-style appearance; not currently bundled |
+| [**Bulky Pixels** font](https://www.1001fonts.com/bulky-pixels-font.html) | Download and install separately for the intended pixel-style appearance |
 
-Gamescope and Steam must already be configured independently. The font's redistribution license and approved installation source are being reviewed; fallback fonts may look different.
+Gamescope and Steam must already be configured independently. Download [Bulky Pixels by Smoking Drum](https://www.1001fonts.com/bulky-pixels-font.html), install the TTF using KDE Font Management, then reopen the widgets if necessary. The font is not bundled.
 
 The installer installs the widgets for the current signed-in desktop user. Steam libraries are discovered automatically from Steam's local configuration.
 
