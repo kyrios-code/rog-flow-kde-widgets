@@ -1,107 +1,129 @@
+<div align="center">
+
 # ROG Flow KDE Widgets
 
-Three independently installable Plasma 6 widgets for a Linux ROG Flow Z13 setup. This repository brings the supplied widget archives into one maintainable baseline without redesigning their interfaces or changing their hardware behavior.
+### Three native KDE Plasma 6 dashboards for the ASUS ROG Flow Z13
 
-| Widget | Preserved plugin ID | Baseline version | Purpose |
-| --- | --- | --- | --- |
-| ROG System Widget | `io.rog.systemwidget` | `1.3.0` | CPU/GPU, memory, battery, storage, network, and `z13ctl` telemetry |
-| ROG Control HUD | `io.rog.controlhud` | `1.2.0` | `z13ctl` power-profile selection and RGB lighting |
-| ROG Gaming HUD | `io.rog.gaminghud` | `1.0.0` | Local Steam library, connected Bluetooth devices, and Gaming Mode launch |
+**System telemetry · Power and RGB controls · Steam Gaming Mode**
 
-**Status:** migration baseline, with inherited limitations documented for review. Live Plasma rendering, installation on a real desktop, and ROG hardware behavior have not been verified here. Passing source/package tests would not establish hardware compatibility. See [compatibility](docs/compatibility.md) and the [review handoff](docs/review-handoff.md).
+**CachyOS** · **KDE Plasma 6** · **ROG Flow Z13** · **MIT License**
 
-## Build and install
+</div>
 
-Use Python 3.12+ and Make for the repository workflow. The System helper requires Python 3.12+. Installing needs a Plasma 6 desktop with `kpackagetool6`; the runtime also needs the Qt/KDE QML modules described in [installation](docs/installation.md).
+> **Status: private preview / release candidate.** Tested visually on one ROG Flow Z13 with CachyOS and a configured Gamescope session. This is an unofficial community project, not affiliated with ASUS or Valve. The downloadable release installer is not published yet.
 
-```sh
+## Three widgets. One desktop.
+
+Turn your ROG Flow Z13 into a transparent, themeable desktop dashboard. Install any one widget or all three; each has independent settings and can be moved and resized using Plasma Edit Mode.
+
+| Widget | What it does | Current source version |
+| --- | --- | --- |
+| **ROG System Widget** | CPU/GPU usage, RAM, battery, APU temperature, fan RPM, TDP, storage, network graph and active power profile | 1.3.0 |
+| **ROG Control HUD** | Switch `z13ctl` performance profiles, view AC/battery autoswitch targets, control keyboard and lightbar RGB | 1.2.0 |
+| **ROG Gaming HUD** | Steam Game Mode launcher, four Bluetooth controller slots with battery readings, recently played games, and power-profile selection | 1.0.0 |
+
+### Screenshots
+
+Real desktop screenshots have been captured for the upcoming release: full desktop, each HUD, Gaming HUD Full/Compact, power-profile selector, appearance/display settings, and Plasma's widget picker. **Image upload is pending**, so this README intentionally does not show broken image links.
+
+## Quick install
+
+### Recommended: download and run
+
+The intended public release will provide a **complete ZIP** with all three prebuilt widgets and a root-level `install.sh`. Once that bundle is published:
+
+1. Open [Releases](../../releases) and download the complete bundle.
+2. Extract the ZIP.
+3. Open a terminal inside the extracted folder and run:
+
+```bash
+bash install.sh
+```
+
+4. Open **KDE Plasma → Edit Mode → Add Widgets**, then search for **ROG System Widget**, **ROG Control HUD**, or **ROG Gaming HUD**.
+
+**The release ZIP is not available yet.** Until then, use the source installation below; do not expect `bash install.sh` to work from the repository root.
+
+### Available now: install from source
+
+Requires Python 3.12+, Make, and `kpackagetool6`:
+
+```bash
 git clone https://github.com/jsmola01/rog-flow-kde-widgets.git
 cd rog-flow-kde-widgets
 make test
-make build
-```
-
-The repository is private, so cloning requires access. Generated `.plasmoid` packages are written to `dist/`, which is excluded from version control.
-
-Install all three for your current user:
-
-```sh
 make install
 ```
 
-Or build and install just one:
+Or install individually with `make install-system`, `make install-control`, or `make install-gaming`. No `sudo` is needed. Existing user-level widget packages are backed up before upgrades. See [installation and recovery](docs/installation.md).
 
-```sh
-make build-system
-make install-system
-```
+## Requirements
 
-Replace `system` with `control` or `gaming` for the other widgets. Add a widget from Plasma's Edit Mode → Add Widgets after installation. Do not run the installer with `sudo`.
+This project initially targets **CachyOS + KDE Plasma 6 + ASUS ROG Flow Z13**, rather than every Linux distribution or ROG model.
 
-| Command | Action |
+| Requirement | Used for |
 | --- | --- |
-| `make build` | Build all three standalone packages |
-| `make build-system`, `make build-control`, `make build-gaming` | Build one package |
-| `make validate` | Validate sources, baseline checksums, and package layout |
-| `make test` | Run the repository's automated checks |
-| `make install` | Build/install or update all three user-level packages |
-| `make install-system`, `make install-control`, `make install-gaming` | Build/install or update one user-level package |
-| `make uninstall-system`, `make uninstall-control`, `make uninstall-gaming` | Remove one user-level package; `make uninstall` removes all three |
-| `make clean` | Remove generated build output |
+| KDE Plasma 6, `kpackagetool6` | Installing and running the widgets |
+| Python 3.12+ | System telemetry helper and source workflow |
+| `z13ctl` installed on the Plasma session's `PATH` | Hardware telemetry, power profiles, and RGB |
+| Steam | Local library and recently played information |
+| `steamos-session-select gamescope` | Switching into an existing Gaming Mode session |
+| BlueZ / `bluetoothctl` | Bluetooth controller connection and battery status |
+| **Bulky Pixels** font | Intended pixel-style appearance; not currently bundled |
 
-The installer backs up an existing user-level package before updating it. It does not change a power profile, apply lighting, switch desktop sessions, install system dependencies, or restart Plasma. The Control and Gaming widgets can perform those first three actions later when you use their controls; see [configuration](docs/configuration.md).
+**`z13gui` is not required by the widgets.** Gamescope and Steam must already be configured independently. The font's redistribution license and approved installation source are being reviewed; fallback fonts may look different.
 
-## Standalone packages
+No hardcoded `/home/kyrios` path is required by the migrated packages. Installation uses the current user's home/data directory. Steam discovery supports standard roots and libraries listed in Steam's configuration; nonstandard setups are not guaranteed.
 
-Each generated package contains its own Python helper under `contents/scripts/` and all supplied image assets. QML resolves the bundled helper with `Qt.resolvedUrl` and invokes `python3` with a shell-quoted path. No helper in `~/.local/bin` and no other installed ROG widget is required. The inherited missing Gaming theme-preview icons are documented in [troubleshooting](docs/troubleshooting.md).
+## System HUD
 
-`z13ctl` is an external runtime dependency discovered through the Plasma session's `PATH`; it is not bundled. Steam data, BlueZ's `bluetoothctl`, and an existing Gamescope session integration provide optional Gaming HUD features. The Gaming Mode action specifically needs `steamos-session-select`, not just the `gamescope` executable.
+Monitor your ROG Flow's utilization, battery, cooling, power limits, graphics memory, storage, network traffic and active profile without opening a terminal. Choose a coordinated color theme, adjust glass transparency, and select Full or Semi-Compact display.
 
-## Repository layout
+## Control HUD
 
-```text
-baselines/                   Original ZIP archives and SHA256SUMS
-widgets/
-  rog-system/
-    package/                 Plasma package metadata, QML, configuration, local assets
-    scripts/telemetry.py
-  rog-control/
-    package/
-    scripts/rog-control-helper.py
-  rog-gaming/
-    package/
-    scripts/rog-gaming-helper.py
-shared/
-  assets.json                Shared icon manifest
-  icons/                     Byte-identical baseline assets, bundled at build time
-  helpers/                   Notes on deferred helper consolidation
-  themes/                    Notes on deferred theme consolidation
-tools/                       Build, installation, and validation tooling
-tests/                       Automated regression/package checks
-docs/                        Installation, configuration, compatibility, review notes
-screenshots/                 Guidance for future real-desktop captures
-.github/workflows/           Automated source/package validation
-dist/                        Generated packages; ignored by Git
-```
+Switch between firmware and custom `z13ctl` profiles, including profiles named for gaming, battery use, or extreme performance. The current profile is highlighted. The profile list scrolls when necessary and firmware modes can be hidden. Keyboard and lightbar lighting can be controlled independently.
 
-Shared assets are a source-organization detail. The build overlays the canonical shared copies into each package; original widget-local copies remain for straightforward baseline comparison. Widget helpers and theme palettes remain widget-local so this migration does not silently unify different behaviors.
+**Changing a profile or lighting setting changes the actual hardware configuration.**
 
-## Documentation and provenance
+## Gaming HUD
 
-- [Installation and recovery](docs/installation.md)
-- [Settings and runtime behavior](docs/configuration.md)
-- [Dependencies and compatibility limits](docs/compatibility.md)
-- [Troubleshooting and inherited issues](docs/troubleshooting.md)
-- [Review handoff for the next conversation](docs/review-handoff.md)
-- [Changelog](CHANGELOG.md)
-- [Third-party notices](THIRD_PARTY_NOTICES.md)
+A square **Game Mode** card opens a frameless power-profile selector. It distinguishes **currently running** from **selected for launch**, so you can choose a profile before entering Gamescope. The HUD also shows up to four Bluetooth controllers and their reported battery levels.
 
-The original ZIPs are retained in `baselines/`; verify their bytes with:
+Choose **Full**, **Semi-Compact**, or **Compact**:
 
-```sh
-(cd baselines && sha256sum -c SHA256SUMS)
-```
+- **Full:** header, launch card, controllers, recent games and installed-game count
+- **Semi-Compact:** header, launch card and controllers
+- **Compact:** launch card and controllers only
 
-The small per-widget READMEs are preserved historical source material. Their displayed versions and `bash install.sh` instructions are stale. Use this root README, the current metadata versions above, and the `make` commands for this repository.
+**Save your work before launching Gaming Mode:** session switching may close your desktop session.
 
-Project code is provided under [MIT](LICENSE). Third-party asset notices and trademark qualifications remain applicable; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). This project is not affiliated with ASUS or Valve.
+> **Known Gaming metadata limitation:** The current baseline may count Steam tools/runtimes as games, miss recently played activity, or lack local cover art. These issues are being addressed before public release.
+
+## Personalize the look
+
+All three widgets use the same four palettes:
+
+| Theme | Accent | Complementary icons |
+| --- | --- | --- |
+| Cyan Glass | Cyan | Warm amber |
+| Purple Nebula | Purple | Mint teal |
+| Emerald Circuit | Emerald | Soft violet |
+| Amber ROG | Amber | Electric blue |
+
+Each widget independently supports glass opacity. Open **Configure Widget → Appearance** to choose a theme and transparency; use **Display** and **Profiles** where available for layout and visibility settings.
+
+## Troubleshooting and development
+
+- [Installation, upgrades and rollback](docs/installation.md)
+- [Configuration and behavior](docs/configuration.md)
+- [Compatibility and dependency details](docs/compatibility.md)
+- [Troubleshooting](docs/troubleshooting.md)
+- [Review handoff and known issues](docs/review-handoff.md)
+
+Developers can build standalone packages with `make build`, or individually with `make build-system`, `make build-control`, and `make build-gaming`. Generated `.plasmoid` files appear in `dist/`. The original working ZIP baselines are retained under `baselines/`.
+
+## Credits and license
+
+Project code is [MIT licensed](LICENSE). Third-party icons, trademarks, and fonts retain their own rights; see [third-party notices](THIRD_PARTY_NOTICES.md). ASUS ROG and Steam marks belong to their respective owners.
+
+**Made for the ROG Flow Z13 community.** Contributions and forks are welcome when the repository becomes public.
