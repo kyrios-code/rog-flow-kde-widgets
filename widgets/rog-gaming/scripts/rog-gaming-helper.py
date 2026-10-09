@@ -4,9 +4,25 @@ import json, os, pathlib, re, subprocess, sys, shutil
 HOME=pathlib.Path.home()
 STEAM=[HOME/".local/share/Steam",HOME/".steam/steam",HOME/".var/app/com.valvesoftware.Steam/.local/share/Steam"]
 def roots():
+    seen=set()
     for p in STEAM:
         if p.exists():
-            yield p.resolve()
+            resolved=p.resolve()
+            if resolved not in seen:
+                seen.add(resolved)
+                yield resolved
+
+STEAM_TOOL_NAME = re.compile(
+    r"^(?:Proton(?: Experimental| Hotfix| [0-9][\\w. -]*)?|"
+    r"Steam Linux Runtime(?:[ -].*)?|"
+    r"Steamworks Common Redistributables|"
+    r"Steam Runtime(?:[ -].*)?|"
+    r"Steam Controller Configs)$", re.I
+)
+
+def is_game(name):
+    return not STEAM_TOOL_NAME.fullmatch(name.strip())
+
 def library():
     games={}
     for root in roots():
@@ -22,32 +38,62 @@ def library():
                 raw=manifest.read_text(errors="replace")
                 appid=re.search(r'"appid"\s+"(\d+)"',raw)
                 name=re.search(r'"name"\s+"([^"]+)"',raw)
-                if appid and name: games[appid.group(1)]=name.group(1)
+                if appid and name and is_game(name.group(1)): games[appid.group(1)]=name.group(1)
     return games
+def last_played_by_app(raw):
+    """Parse LastPlayed within each app's VDF object, not neighboring blocks."""
+    tokens=re.findall(r'"(?:\\.|[^"\\])*"|[{}]', raw)
+    stack=[]
+    pending=None
+    result={}
+    i=0
+    while i<len(tokens):
+        token=tokens[i]
+        if token=="{":
+            stack.append(pending)
+            pending=None
+        elif token=="}":
+            if stack:stack.pop()
+            pending=None
+        elif token.startswith('"'):
+            value=token[1:-1]
+            if i+1<len(tokens) and tokens[i+1]=="{":
+                pending=value
+            elif i+1<len(tokens) and tokens[i+1].startswith('"'):
+                next_value=tokens[i+1][1:-1]
+                if value.lower()=="lastplayed" and stack and stack[-1] and stack[-1].isdigit() and next_value.isdigit():
+                    appid=stack[-1]
+                    result[appid]=max(result.get(appid,0),int(next_value))
+                i+=1
+        i+=1
+    return result
+
 def recent(games):
-    # Steam stores last-played timestamps in userdata/*/config/localconfig.vdf
     found={}
     for root in roots():
         for p in (root/"userdata").glob("*/config/localconfig.vdf"):
-            raw=p.read_text(errors="replace")
-            for appid,name in games.items():
-                # Restrict to the game's own nested block, not a global last-played value
-                m=re.search(r'(?m)^\s*"'+re.escape(appid)+r'"\s*\{',raw)
-                if not m:continue
-                chunk=raw[m.end():m.end()+1400]
-                t=re.search(r'"LastPlayed"\s+"(\d+)"',chunk,re.I)
-                if t:found[appid]=max(found.get(appid,0),int(t.group(1)))
+            for appid,timestamp in last_played_by_app(p.read_text(errors="replace")).items():
+                if appid in games:
+                    found[appid]=max(found.get(appid,0),timestamp)
     result=[]
-    for k,v in sorted(found.items(),key=lambda item:-item[1])[:5]:
+    for appid,timestamp in sorted(found.items(),key=lambda item:-item[1])[:5]:
         art=""
         for root in roots():
             cache=root/"appcache/librarycache"
-            for candidate in (cache/f"{k}_library_600x900.jpg",cache/f"{k}_library_600x900.png",cache/k/"library_600x900.jpg",cache/k/"library_600x900.png"):
+            for candidate in (
+                cache/f"{appid}_library_600x900.jpg",
+                cache/f"{appid}_library_600x900.png",
+                cache/appid/"library_600x900.jpg",
+                cache/appid/"library_600x900.png",
+                cache/appid/"library_600x900.webp",
+            ):
                 if candidate.is_file():
-                    art=candidate.resolve().as_uri();break
+                    art=candidate.resolve().as_uri()
+                    break
             if art:break
-        result.append(dict(id=k,name=games[k],lastPlayed=v,art=art))
+        result.append(dict(id=appid,name=games[appid],lastPlayed=timestamp,art=art))
     return result
+
 def profiles():
     p=subprocess.run(["z13ctl","profile","--list"],capture_output=True,text=True,timeout=12)
     if p.returncode:raise RuntimeError("Could not read profiles")
